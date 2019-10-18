@@ -45,7 +45,7 @@ namespace Laboratorio_7_OOP_201902
             }
         }
 
-        List<string> ICharacteristics.GetCharacteristics()
+        public List<string> GetCharacteristics()
         {
             List<String> characteristics = new List<string> { };
 
@@ -125,6 +125,7 @@ namespace Laboratorio_7_OOP_201902
             characteristics.Add(totalAttackPointLongRange);
 
             string totalAttackPoint =Convert.ToString( auxauxtotalAttackPointMelee.Sum() + auxauxtotalAttackPointRange.Sum() + auxauxtotalAttackPointRange.Sum());
+            characteristics.Add(totalAttackPoint);
 
             return characteristics;
         }

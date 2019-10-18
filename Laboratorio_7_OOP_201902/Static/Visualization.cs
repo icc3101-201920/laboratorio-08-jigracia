@@ -35,6 +35,18 @@ namespace Laboratorio_7_OOP_201902.Static
             for (int i = 0; i<decks.Count; i++)
             {
                 Console.WriteLine($"({i}) Deck {i+1}");
+                Console.WriteLine("Number of Cards: "+decks[i].GetCharacteristics()[0]);
+                Console.WriteLine("Number of Melee Cards: " + decks[i].GetCharacteristics()[1]);
+                Console.WriteLine("Number of Range Cards: " + decks[i].GetCharacteristics()[2]);
+                Console.WriteLine("Number of LongRange Cards: " + decks[i].GetCharacteristics()[3]);
+                Console.WriteLine("Number of Buff Cards: " + decks[i].GetCharacteristics()[4]);
+                Console.WriteLine("Number of Weather Cards: " + decks[i].GetCharacteristics()[5]);
+                Console.WriteLine("Total Attack points of Melee Cards: " + decks[i].GetCharacteristics()[6]);
+                Console.WriteLine("Total Attack points of Range Cards: " + decks[i].GetCharacteristics()[7]);
+                Console.WriteLine("Total Attack points of LongRange Cards: " + decks[i].GetCharacteristics()[8]);
+                Console.WriteLine("Total Attack points : " + decks[i].GetCharacteristics()[9]);
+                Console.WriteLine("--------------------------------------------------------------------------------------");
+
             }
         }
         public static void ShowCaptains(List<SpecialCard> captains)
@@ -42,7 +54,8 @@ namespace Laboratorio_7_OOP_201902.Static
             Console.WriteLine("Select one captain:");
             for (int i = 0; i < captains.Count; i++)
             {
-                Console.WriteLine($"({i}) {captains[i].Name}: {captains[i].Effect}");
+                Console.WriteLine($"({i}) {captains[i].GetCharacteristics()[0]} ({captains[i].GetCharacteristics()[1]}) : {captains[i].GetCharacteristics()[2]}");
+
             }
         }
         public static int GetUserInput(int maxInput, bool stopper = false)
@@ -140,6 +153,10 @@ namespace Laboratorio_7_OOP_201902.Static
             }
             Console.WriteLine();
             
+        }
+        public static void PressToContinue()
+        {
+            Console.ReadKey();
         }
 
     }

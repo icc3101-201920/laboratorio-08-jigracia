@@ -122,6 +122,8 @@ namespace Laboratorio_7_OOP_201902
         public void Play()
         {
             int userInput = 0;
+            int userInput1 = 0;
+            int contChanges = 0;
             int firstOrSecondUser = ActivePlayer.Id == 0 ? 0 : 1;
             int winner = -1;
             bool bothPlayersPlayed = false;
@@ -130,6 +132,7 @@ namespace Laboratorio_7_OOP_201902
             while (turn < 4 && !CheckIfEndGame())
             {
                 bool drawCard = false;
+                bool endCicle = true;
                 //turno 0 o configuracion
                 if (turn == 0)
                 {
@@ -152,25 +155,84 @@ namespace Laboratorio_7_OOP_201902
                         //Asignar mano
                         ActivePlayer.FirstHand();
                         //Mostrar mano
-                        Visualization.ShowHand(ActivePlayer.Hand);
-                        //Mostar opciones, cambiar carta o pasar
-                        Visualization.ShowListOptions(new List<string>() { "Change Card", "Pass" }, "Change 3 cards or ready to play:");
-                        userInput = Visualization.GetUserInput(1);
-                        if (userInput == 0)
+                        while (endCicle)
                         {
-                            Visualization.ClearConsole();
-                            Visualization.ShowProgramMessage($"Player {ActivePlayer.Id+1} change cards:");
                             Visualization.ShowHand(ActivePlayer.Hand);
-                            for (int i = 0; i < DEFAULT_CHANGE_CARDS_NUMBER; i++)
+                            //Mostar opciones, cambiar carta o pasar
+                            Visualization.ShowListOptions(new List<string>() { "Change Card", "Show card info", "Pass" }, "Change 3 cards or ready to play:");
+                            userInput = Visualization.GetUserInput(2);
+                            if (userInput == 0)
                             {
-                                Visualization.ShowProgramMessage($"Input the numbers of the cards to change (max {DEFAULT_CHANGE_CARDS_NUMBER}). To stop enter -1");
-                                userInput = Visualization.GetUserInput(ActivePlayer.Hand.Cards.Count, true);
-                                if (userInput == -1) break;
-                                ActivePlayer.ChangeCard(userInput);
+                                if (contChanges < 3)
+                                {
+                                    Visualization.ClearConsole();
+                                    Visualization.ShowProgramMessage($"Player {ActivePlayer.Id + 1} change cards:");
+                                    Visualization.ShowHand(ActivePlayer.Hand);
+                                    for (int i = 0; i < DEFAULT_CHANGE_CARDS_NUMBER; i++)
+                                    {
+                                        Visualization.ShowProgramMessage($"Input the numbers of the cards to change (max {DEFAULT_CHANGE_CARDS_NUMBER}). To stop enter -1");
+                                        userInput = Visualization.GetUserInput(ActivePlayer.Hand.Cards.Count, true);
+                                        if (userInput == -1)
+                                        {
+                                            break;
+                                        }
+                                        ActivePlayer.ChangeCard(userInput);
+                                        contChanges += 1;
+                                        Visualization.ShowHand(ActivePlayer.Hand);
+                                    }
+                                    Visualization.ClearConsole();
+                                }
+                                else
+                                {
+                                    Visualization.ShowProgramMessage("Already Changed the max number of cards");
+                                    Visualization.ShowProgramMessage("Press any key to continue");
+                                    Visualization.PressToContinue();
+                                    Visualization.ClearConsole();
+                                }
+                            }
+                            if (userInput == 1)
+                            {
+                                Visualization.ClearConsole();
                                 Visualization.ShowHand(ActivePlayer.Hand);
+                                Visualization.ShowProgramMessage("Input the number of the card you want to see the info. To cancel enter -1");
+                                userInput1 = Visualization.GetUserInput(ActivePlayer.Hand.Cards.Count,true);
+                                if (userInput1 != -1)
+                                {
+
+                                    if (ActivePlayer.Hand.Cards[userInput1] is CombatCard)
+                                    {
+                                        CombatCard aux = ActivePlayer.Hand.Cards[userInput1] as CombatCard;
+                                        Visualization.ShowProgramMessage("Name: " + aux.GetCharacteristics()[0]);
+                                        Visualization.ShowProgramMessage("Type: " + aux.GetCharacteristics()[1]);
+                                        Visualization.ShowProgramMessage("Effect: " + aux.GetCharacteristics()[2]);
+                                        Visualization.ShowProgramMessage("AttackPoints: " + aux.GetCharacteristics()[3]);
+                                        Visualization.ShowProgramMessage("Hero: " + aux.GetCharacteristics()[4]);
+                                        Visualization.ShowProgramMessage("");
+                                        Visualization.ShowProgramMessage("Press any key to continue");
+                                        Visualization.PressToContinue();
+
+                                    }
+                                    else
+                                    {
+                                        SpecialCard aux = ActivePlayer.Hand.Cards[userInput1] as SpecialCard;
+                                        Visualization.ShowProgramMessage("Name: " + aux.GetCharacteristics()[0]);
+                                        Visualization.ShowProgramMessage("Type: " + aux.GetCharacteristics()[1]);
+                                        Visualization.ShowProgramMessage("Effect: " + aux.GetCharacteristics()[2]);
+                                        Visualization.ShowProgramMessage("");
+                                        Visualization.ShowProgramMessage("Press any key to continue");
+                                        Visualization.PressToContinue();
+                                    }
+                                }
+                                Visualization.ClearConsole();
+                            }
+                            if (userInput==2)
+                            {
+                                firstOrSecondUser = ActivePlayer.Id == 0 ? 1 : 0;
+                                endCicle = false;
                             }
                         }
-                        firstOrSecondUser = ActivePlayer.Id == 0 ? 1 : 0;
+                        endCicle = true;
+                        contChanges = 0;
                     }
                     turn += 1;
                 }
@@ -194,8 +256,8 @@ namespace Laboratorio_7_OOP_201902
                             drawCard = true;
                         }
                         Visualization.ShowHand(ActivePlayer.Hand);
-                        Visualization.ShowListOptions(new List<string> { "Play Card", "Pass" }, $"Make your move player {ActivePlayer.Id+1}:");
-                        userInput = Visualization.GetUserInput(1);
+                        Visualization.ShowListOptions(new List<string> { "Play Card","Show Card Info","Pass" }, $"Make your move player {ActivePlayer.Id+1}:");
+                        userInput = Visualization.GetUserInput(2);
                         if (userInput == 0)
                         {
                             //Si la carta es un buff solicitar a la fila que va.
@@ -233,11 +295,47 @@ namespace Laboratorio_7_OOP_201902
                                 break;
                             }
                         }
-                        else
+                        if (userInput==1)
+                        {
+                            Visualization.ClearConsole();
+                            Visualization.ShowHand(ActivePlayer.Hand);
+                            Visualization.ShowProgramMessage("Input the number of the card you want to see the info. To cancel enter -1");
+                            userInput1 = Visualization.GetUserInput(ActivePlayer.Hand.Cards.Count, true);
+                            if (userInput1 != -1)
+                            {
+
+                                if (ActivePlayer.Hand.Cards[userInput1] is CombatCard)
+                                {
+                                    CombatCard aux = ActivePlayer.Hand.Cards[userInput1] as CombatCard;
+                                    Visualization.ShowProgramMessage("Name: " + aux.GetCharacteristics()[0]);
+                                    Visualization.ShowProgramMessage("Type: " + aux.GetCharacteristics()[1]);
+                                    Visualization.ShowProgramMessage("Effect: " + aux.GetCharacteristics()[2]);
+                                    Visualization.ShowProgramMessage("AttackPoints: " + aux.GetCharacteristics()[3]);
+                                    Visualization.ShowProgramMessage("Hero: " + aux.GetCharacteristics()[4]);
+                                    Visualization.ShowProgramMessage("");
+                                    Visualization.ShowProgramMessage("Press any key to continue");
+                                    Visualization.PressToContinue();
+
+                                }
+                                else
+                                {
+                                    SpecialCard aux = ActivePlayer.Hand.Cards[userInput1] as SpecialCard;
+                                    Visualization.ShowProgramMessage("Name: " + aux.GetCharacteristics()[0]);
+                                    Visualization.ShowProgramMessage("Type: " + aux.GetCharacteristics()[1]);
+                                    Visualization.ShowProgramMessage("Effect: " + aux.GetCharacteristics()[2]);
+                                    Visualization.ShowProgramMessage("");
+                                    Visualization.ShowProgramMessage("Press any key to continue");
+                                    Visualization.PressToContinue();
+                                }
+                            }
+                            Visualization.ClearConsole();
+                        }
+                        if (userInput==2)
                         {
                             firstOrSecondUser = ActivePlayer.Id == 0 ? 1 : 0;
                             break;
                         }
+
                     }
                     //Cambiar al oponente si no ha jugado
                     if (!bothPlayersPlayed)
