@@ -1,11 +1,12 @@
 ﻿using Laboratorio_7_OOP_201902.Enums;
+using Laboratorio_7_OOP_201902.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Laboratorio_7_OOP_201902.Cards
 {
-    public class SpecialCard : Card
+    public class SpecialCard : Card, ICharacteristics
     {
         //Atributos
         private string buffType;
@@ -31,6 +32,10 @@ namespace Laboratorio_7_OOP_201902.Cards
             BuffType = null;
         }
 
-        
+        List<string> ICharacteristics.GetCharacteristics()
+        {
+            List<string> charateristics = new List<string> { Name, Convert.ToString(Type), Effect};
+            return charateristics;
+        }
     }
 }

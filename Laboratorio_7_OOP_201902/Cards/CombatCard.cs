@@ -1,11 +1,12 @@
 ﻿using Laboratorio_7_OOP_201902.Enums;
+using Laboratorio_7_OOP_201902.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Laboratorio_7_OOP_201902.Cards
 {
-    public class CombatCard : Card
+    public class CombatCard : Card, ICharacteristics
     {
         //Atributos
         private int attackPoints;
@@ -44,6 +45,10 @@ namespace Laboratorio_7_OOP_201902.Cards
             }
         }
 
-        
+        List<string> ICharacteristics.GetCharacteristics()
+        {
+            List<string> charateristics = new List<string> {Name,Convert.ToString(Type),Effect,Convert.ToString(AttackPoints), Convert.ToString(Hero)};
+            return charateristics;
+        }
     }
 }
