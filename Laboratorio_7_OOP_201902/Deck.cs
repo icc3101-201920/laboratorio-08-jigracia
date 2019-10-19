@@ -8,6 +8,7 @@ using System.Text;
 
 namespace Laboratorio_7_OOP_201902
 {
+    [Serializable]
     public class Deck:ICharacteristics
     {
 
